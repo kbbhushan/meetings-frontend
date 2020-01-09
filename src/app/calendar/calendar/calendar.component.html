@@ -1,0 +1,50 @@
+<h1 (click)="clik()">Meeting Planner</h1>
+<h2 align=center>{{monthName}}</h2>
+<div class="container">
+  
+<table class="table">
+  <thead>
+    <tr>
+    
+      <th >Sunday</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+      <th>Saturday</th>
+         
+    </tr>
+  </thead>
+
+
+ 
+    <tr *ngFor="let k of monthArr">
+      
+     
+        <td (click)="clik(l)" *ngFor="let l of k">
+
+          <div *ngIf="l" > 
+            <span  [innerHTML]="l"> </span>
+            <a [routerLink]="['/day']"></a>
+          </div>
+      
+      </td>
+    
+    </tr>
+ 
+
+</table>
+
+
+  
+    <div *ngFor="let k of monthArr">
+      <div class="row" *ngIf="k[0]||k[1]||k[2] ||k[3]||k[4] ||k[5]||k[6]">
+        <div class="grid-cell" (click)="clik(l)" *ngFor="let l of k">
+
+          <div class = "cal-day-number" *ngIf="l"> 
+            <span  [innerHTML]="l"> </span>
+          </div>
+        </div>
+      </div>
+    </div>
