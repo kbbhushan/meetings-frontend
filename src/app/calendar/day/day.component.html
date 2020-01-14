@@ -2,10 +2,13 @@
     <div><h1 class="center"> {{ day}} - {{month}} - {{year}}</h1></div>
   <div *ngIf="meetingsOnThisDay ; else noMeetings" >
   <div *ngFor='let meeting of meetingsOnThisDay'>
-   <button (click)="showMeetingDetails(meeting)" > {{meeting.startTime}} -{{meeting.endTime}} </button><br>
+   <button (click)="showMeetingDetails(meeting)" > {{meeting.startTime + ''}} -{{meeting.endTime}} </button><br>
    </div>
+  </div><br><br>
+  <div>
+    <button class="btn btn-primary" (click)="createMeeting()" >Create Meeting</button><br>
   </div>
-
+  <br>
   <ng-template #noMeetings>
     <p>
       There are no meetings on this day.

@@ -74,6 +74,16 @@ export class AppService {
     return this.http.put(`${this.url}/api/v1/meetings/edit/`+data.meetingId, data);
   } // end of getMeetingsInAMonth function.
 
+  public deleteMeeting(data): Observable<any> {
+
+    return this.http.post(`${this.url}/api/v1/meetings/delete/`+data.meetingId, data);
+  } // end of getMeetingsInAMonth function.
+
+  public createMeeting(data): Observable<any> {
+
+    return this.http.post(`${this.url}/api/v1/meetings/create`, data);
+  } // end of getMeetingsInAMonth function.
+
   public logout(): Observable<any> {
 
     const params = new HttpParams()

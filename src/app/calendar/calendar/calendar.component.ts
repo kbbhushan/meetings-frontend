@@ -188,9 +188,4 @@ export class CalendarComponent {
     })
   }///end of getMeetingsInThisMonth
 
-  showMessage(){
-    console.log("Showing the message");
-    alert("Showing the message");
-  }
-
 }

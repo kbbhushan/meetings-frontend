@@ -11,8 +11,9 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { MeetingComponent } from './meeting/meeting.component';
-import { FormsModule} from '@angular/forms';
-import { MeetingViewComponent } from './meeting-view/meeting-view.component'
+import { FormsModule , ReactiveFormsModule} from '@angular/forms';
+import { MeetingEditComponent } from './meeting-edit/meeting-edit.component';
+import { MeetingCreateComponent } from './meeting-create/meeting-create.component'
 
 
 
@@ -20,7 +21,7 @@ import { MeetingViewComponent } from './meeting-view/meeting-view.component'
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule,
+    CommonModule, FormsModule, ReactiveFormsModule,
     BrowserAnimationsModule,
     NgbModalModule,
     ToastrModule.forRoot(),
@@ -34,7 +35,7 @@ import { MeetingViewComponent } from './meeting-view/meeting-view.component'
     })
   ],
   providers:[DatePipe],
-  declarations: [CalendarComponent, DayComponent, MeetingComponent, MeetingViewComponent],
-  entryComponents :[DayComponent, MeetingComponent, MeetingViewComponent]
+  declarations: [CalendarComponent, DayComponent, MeetingComponent, MeetingEditComponent, MeetingCreateComponent],
+  entryComponents :[DayComponent, MeetingComponent, MeetingEditComponent, MeetingCreateComponent]
 })
 export class MyCalendarModule { }

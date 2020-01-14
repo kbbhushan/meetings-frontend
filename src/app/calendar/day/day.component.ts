@@ -4,6 +4,7 @@ import { AppService } from '../../app.service';
 import {DatePipe} from '@angular/common';
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap'
 import { MeetingComponent } from '../meeting/meeting.component';
+import { MeetingCreateComponent } from '../meeting-create/meeting-create.component';
  
 @Component({
   selector: 'app-day',
@@ -50,33 +51,26 @@ export class DayComponent implements OnInit {
   }
 
   showMeetingDetails(meeting : any){
-    console.log('Show Meeting Details Called in Day Component');
-    console.log('Meeting Id clicked is ', meeting);
+   
     const modalRef = this.modalService.open(MeetingComponent, {size : 'lg'});
     modalRef.componentInstance.meetingsOnThisDay = this.meetingsOnThisDay;
     modalRef.componentInstance.meeting = meeting;
     modalRef.componentInstance.date = this.date;
     modalRef.result.then((result)=>{
-
-      console.log('Calling Edit Meeting')
+      this.getMeeetingsOnThisDay();
     }, (reason) =>{   console.log('console msg from showMeetingDetails', reason)});
     
   }
 
-  editMeeting(data){
+  createMeeting(){
 
-    this.appService.editMeeting(data).subscribe((apiResponse) =>{
-
-      if(apiResponse.status===200){
-        console.log(apiResponse.data);
-        console.log('update successful')
-      }else{
-
-        console.log('Error Occurred');
-      }
-
-
-    })
+    console.log('Create Meeting called');
+    /* const modalRef = this.modalService.open(MeetingCreateComponent, {size : 'lg'});
+    modalRef.componentInstance.date = this.date;
+    modalRef.result.then((result)=>{
+      this.getMeeetingsOnThisDay();
+    }, (reason) =>{   console.log('console msg from showMeetingDetails', reason)});
+     */
   }
 
 }

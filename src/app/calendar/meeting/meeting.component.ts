@@ -2,7 +2,7 @@ import { Component, OnInit, Input} from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { AppService } from '../../app.service';
-import { MeetingViewComponent } from '../meeting-view/meeting-view.component';
+import { MeetingEditComponent } from '../meeting-edit/meeting-edit.component';
 
 
 
@@ -36,13 +36,14 @@ export class MeetingComponent implements OnInit {
 
 editThisMeeting(){
 
-  const modalRef = this.modalService.open(MeetingViewComponent, {size : 'lg'});
+  const modalRef = this.modalService.open(MeetingEditComponent, {size : 'lg'});
   
   modalRef.componentInstance.meeting = this.meeting;
   modalRef.componentInstance.date = this.date;
   modalRef.result.then((result)=>{
 
-    console.log('Calling Edit Meeting', this.editMeeting(result))
+    console.log('Calling Edit Meeting', this.editMeeting(result));
+    this.activeModal.close();
   }, (reason) =>{   console.log('console msg from showMeetingDetails', reason)});
 }
 
@@ -52,7 +53,7 @@ editMeeting(data){
 
     if(apiResponse.status===200){
       console.log(apiResponse.data);
-      console.log('update successful')
+      console.log('update successful');
     }else{
 
       console.log('Error Occurred');
@@ -62,9 +63,21 @@ editMeeting(data){
   })
 }
 
-deleteThisMeeting(){
+deleteThisMeeting(data){
 
-  console.log("Meeting Deleted");
+  this.appService.deleteMeeting(data).subscribe((apiResponse) =>{
+
+    if(apiResponse.status===200){
+      console.log(apiResponse.data);
+      console.log('Delete successful');
+      this.activeModal.close();
+    }else{
+
+      console.log('Error Occurred');
+    }
+
+
+  })
 }
 
 }

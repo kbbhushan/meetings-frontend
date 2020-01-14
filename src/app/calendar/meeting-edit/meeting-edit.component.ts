@@ -4,11 +4,11 @@ import {DatePipe} from '@angular/common';
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
-  selector: 'app-meeting-view',
-  templateUrl: './meeting-view.component.html',
-  styleUrls: ['./meeting-view.component.css']
+  selector: 'app-meeting-edit',
+  templateUrl: './meeting-edit.component.html',
+  styleUrls: ['./meeting-edit.component.css']
 })
-export class MeetingViewComponent implements OnInit {
+export class MeetingEditComponent implements OnInit {
 
   constructor(private appService : AppService,private modalService: NgbModal,public activeModal: NgbActiveModal) { }
 
