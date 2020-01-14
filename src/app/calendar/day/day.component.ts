@@ -58,7 +58,7 @@ export class DayComponent implements OnInit {
     modalRef.componentInstance.date = this.date;
     modalRef.result.then((result)=>{
 
-      console.log('Calling Edit Meeting', this.editMeeting(result))
+      console.log('Calling Edit Meeting')
     }, (reason) =>{   console.log('console msg from showMeetingDetails', reason)});
     
   }
