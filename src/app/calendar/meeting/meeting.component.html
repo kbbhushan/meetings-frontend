@@ -1,0 +1,22 @@
+<div class="modal-header">
+      <h4 class="modal-title"> {{ day}} - {{month}} - {{year}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+</div>
+<div class="modal-body">
+        <div class="row" *ngIf="meeting">
+              <div class="col-md-12">
+                <h2>{{meeting.purpose}}</h2>
+                <p>Date: {{meeting.meetingDay}}</p>
+                <p>Starts at : {{meeting.startTime}}  Ends at: {{meeting.endTime}}</p>
+                <p>created by {{meeting.createdBy}} on {{meeting.createdOn | date}}</p>
+            </div>
+            </div>
+            <hr>         
+</div>
+<div class="modal-footer">
+      <button  class="btn btn-primary" (click)="editThisMeeting()">Edit</button>
+      <button  class="btn btn-danger" (click)="deleteThisMeeting()">Delete</button>
+      <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

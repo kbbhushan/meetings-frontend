@@ -66,8 +66,12 @@ export class AppService {
 
   public getMeetingsOnADay(data): Observable<any> {
 
-
     return this.http.get(`${this.url}/api/v1/meetings/day/`+data.day);
+  } // end of getMeetingsInAMonth function.
+
+  public editMeeting(data): Observable<any> {
+
+    return this.http.put(`${this.url}/api/v1/meetings/edit/`+data.meetingId, data);
   } // end of getMeetingsInAMonth function.
 
   public logout(): Observable<any> {

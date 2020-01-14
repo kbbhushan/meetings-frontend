@@ -1,115 +1,183 @@
-import { Component, OnInit , ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef
+} from '@angular/core';
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  addHours
+} from 'date-fns';
+import { Subject } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  CalendarEvent,
+  CalendarEventAction,
+  CalendarEventTimesChangedEvent,
+  CalendarView
+} from 'angular-calendar';
+import {  OnInit , ViewContainerRef } from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { AppService} from '../../app.service'
+import { AppService} from '../../app.service';
+import { DayComponent } from '../day/day.component';
 
+const colors: any = {
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3'
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF'
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA'
+  }
+};
 
 @Component({
   selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css']
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./calendar.component.css'],
+  templateUrl: './calendar.component.html'
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent {
+  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
-  ngOnInit() {
-    this.calculateDayOfThisMonth();
-    this.getMeetingsInThisMonth();
-  }
+  dateClicked : Date ;
 
-  constructor ( private datePipe : DatePipe,public router: Router,private appService : AppService,
-    private toastr: ToastrService,
-    vcr: ViewContainerRef){
-    
-  }
+  view: CalendarView = CalendarView.Month;
+  CalendarView = CalendarView;
 
-  title = 'calendar';
-  viewDate: Date  = new Date();
-  value:number = 5;
-  year:string;
-  month:string;
-  id1:number;
-  empty:' ';
-  meetingsInThisMonth =[];
-  meetingDays=[];
-  monthName:string="";
-  monthArr :any[][]=[[true, true, true, true, true, true, true],
-                      [true, true, true, true, true, true, true],
-                      [true, true, true, true, true, true, true],
-                      [true, true, true, true, true, true, true],
-                      [true, true, true, true, true, true, true],
-                      [true, true, true, true, true, true, true]
-                    ];
- 
-  clik($event :number){
+  viewDate: Date = new Date();
 
-    
-    
-    let day = this.year+ this.month + (($event+'').length == 1 ? '0'+$event : $event)
-    console.log('the day clicked is ', day);
-   this.router.navigate(['/day',day])
-  }
+  modalData: {
+    action: string;
+    event: CalendarEvent;
+  };
 
-  calculateDayOfThisMonth(){
-
-    this.year = this.datePipe.transform(new Date(),'yyyy');
-    this.month = this.datePipe.transform(new Date(),'MM');
-    console.log('this.month value is ', this.month)
-    this.monthName = this.datePipe.transform(new Date(),'MMMM');
-    this.id1 = +this.datePipe.transform(new Date(),'yyyyMMdd');
-    this.id1=1
-    idofdate:Number;
-    let date = new Date(+this.year, +this.month-1, 1);
-    let startDay = this.datePipe.transform(date,'EEE');
-    console.log('starting day of this month is ', startDay);
-    let noOfDays =0;
-  let days = [];
-  
-  while (date.getMonth() === +this.month-1) {
-    noOfDays++;
-    days.push(new Date(date));
-    date.setDate(date.getDate() + 1);
-  }
-
-    console.log(this.year ,this.month, noOfDays);
-    let countOfDays = noOfDays;
-    
-    for(let i=0;i<=0;i++){
-       
-        for(let j=0;j<3;j++){
-            this.monthArr[i][j]=false;
-            
-        }
-        i=1;
-    }
-   let k=0;
-    for (let i =0; i< 6; i++){
-      
-     // this.monthArr[i]=[];
-      for (let j=0;j<7;j++ ){
-       
-        if(countOfDays>0 && this.monthArr[i][j]!=false){
-          this.monthArr[i][j]=++k;
-       // this.monthArr[i][j]=year+""+month+""+ (k < 9 ? 0+""+k : k);
-       
-        countOfDays--;
-        }
-        else{
-         
-          this.monthArr[i][j]=false;
-        }
+  actions: CalendarEventAction[] = [
+    {
+      label: '<i class="fa fa-fw fa-pencil"></i>',
+      a11yLabel: 'Edit',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('Edited', event);
+      }
+    },
+    {
+      label: '<i class="fa fa-fw fa-times"></i>',
+      a11yLabel: 'Delete',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.events = this.events.filter(iEvent => iEvent !== event);
+        this.handleEvent('Deleted', event);
       }
     }
-   
+  ];
+
+  refresh: Subject<any> = new Subject();
+
+  events: CalendarEvent[] = [];
+
+  activeDayIsOpen: boolean = false;
+
+  constructor(private modalService: NgbModal,
+    private datePipe : DatePipe,public router: Router,private appService : AppService,
+    private toastr: ToastrService,
+    vcr: ViewContainerRef
+    ) {}
+
+    ngOnInit() {
+      
+      this.getMeetingsInThisMonth();
+    }
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    console.log('date clicked is ', date);
+    this.dateClicked = date; 
+    // this.modalData = { event, action };
+    //this.modal.open(this.modalContent, { size: 'lg' });
+    const modalRef = this.modalService.open(DayComponent);
+    modalRef.componentInstance.date = date;
+    
+    console.log('view date is ', this.viewDate);
+  }
+
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd
+  }: CalendarEventTimesChangedEvent): void {
+    this.events = this.events.map(iEvent => {
+      if (iEvent === event) {
+        return {
+          ...event,
+          start: newStart,
+          end: newEnd
+        };
+      }
+      return iEvent;
+    });
+    this.handleEvent('Dropped or resized', event);
+  }                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+  handleEvent(action: string, event: CalendarEvent): void {
+   // this.modalData = { event, action };
+    //this.modal.open(this.modalContent, { size: 'lg' });
+  }
+
+  addEvent(): void {
+    this.events = [
+      ...this.events,
+      {
+        title: 'New event',
+        start: startOfDay(new Date()),
+        end: endOfDay(new Date()),
+        color: colors.red,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
+        }
+      }
+    ];
+  }
+
+  deleteEvent(eventToDelete: CalendarEvent) {
+    this.events = this.events.filter(event => event !== eventToDelete);
+  }
+
+  setView(view: CalendarView) {
+    this.view = view;
+  }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
+    
+   // console.log('view-',this.view,'viewDate',this.viewDate);
+    this.getMeetingsInThisMonth();
+    
   }
 
   getMeetingsInThisMonth(){
-    console.log('In getMeetingInThisMonth function', this.year, this.month);
-    this.appService.getMeetingsInAMonth({month: this.year+this.month}).subscribe((apiResponse) =>{
+   
+    let year = this.datePipe.transform(this.viewDate,'yyyy');
+    let month = this.datePipe.transform(this.viewDate, 'MM');
+   // console.log(this.viewDate);
+    console.log("year-",year,'month-',month);
+    this.appService.getMeetingsInAMonth({month: year+month}).subscribe((apiResponse) =>{
 
       if(apiResponse.status===200){
         console.log(apiResponse.data);
-        this.meetingsInThisMonth = apiResponse.data;
+       //this.meetingsInThisMonth = apiResponse.data;
         //this.meetingDays=this.meetingsInThisMonth
       }else{
 
@@ -118,5 +186,11 @@ export class CalendarComponent implements OnInit {
 
 
     })
-}
+  }///end of getMeetingsInThisMonth
+
+  showMessage(){
+    console.log("Showing the message");
+    alert("Showing the message");
+  }
+
 }

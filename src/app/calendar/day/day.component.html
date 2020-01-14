@@ -1,33 +1,14 @@
 <div class="container">
     <div><h1 class="center"> {{ day}} - {{month}} - {{year}}</h1></div>
-    <table class="table table-bordered">
-        
-        <tbody>
-          <tr>
-            <td>00 AM - 01 AM</td>
-            <td>01 AM - 02 AM</td>
-            <td>02 AM - 03 AM</td>
-            <td>03 AM - 04 AM</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-       
-      </table>
+  <div *ngIf="meetingsOnThisDay ; else noMeetings" >
+  <div *ngFor='let meeting of meetingsOnThisDay'>
+   <button (click)="showMeetingDetails(meeting)" > {{meeting.startTime}} -{{meeting.endTime}} </button><br>
+   </div>
+  </div>
+
+  <ng-template #noMeetings>
+    <p>
+      There are no meetings on this day.
+    </p>
+  </ng-template>
 </div>
