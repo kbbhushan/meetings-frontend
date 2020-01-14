@@ -9,7 +9,7 @@ import {DatePipe} from '@angular/common';
 import { DayComponent } from './day/day.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MeetingComponent } from './meeting/meeting.component';
 import { FormsModule , ReactiveFormsModule} from '@angular/forms';
 import { MeetingEditComponent } from './meeting-edit/meeting-edit.component';
@@ -23,7 +23,7 @@ import { MeetingCreateComponent } from './meeting-create/meeting-create.componen
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
     BrowserAnimationsModule,
-    NgbModalModule,
+    NgbModalModule,NgbModule,
     ToastrModule.forRoot(),
     RouterModule.forChild([ 
       { path: 'calendar', component: CalendarComponent },

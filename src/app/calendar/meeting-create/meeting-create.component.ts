@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AppService } from 'src/app/app.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
-
+import { NgbTimepicker } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-meeting-create',
   templateUrl: './meeting-create.component.html',
@@ -18,20 +18,21 @@ export class MeetingCreateComponent implements OnInit {
 
   ngOnInit() {
 
-    this.meetingDay = this.datePipe.transform(this.date,'yyyy')+''
-    this.datePipe.transform(this.date, 'MM')+''
+    this.meetingDay = this.datePipe.transform(this.date,'yyyy')+''+
+    this.datePipe.transform(this.date, 'MM')+''+
    this.datePipe.transform(this.date, 'dd');
-
+   this.meetingStartTime = {hour: 10, minute: 30};
+   this.meetingEndTime = {hour: 11, minute: 30};
   }
   @Input() date;
 
   public meetingDay : any;
  
-  public startTime: any;
-  public endTime: any;
-  public where:any;
-  public purpose:any;
-  public createdBy :any;
+  public meetingStartTime: any;
+  public meetingEndTime: any;
+  public meetingLocation:any;
+  public meetingPurpose: string;
+  public meetingCreatedBy :any;
 
   onClick() {
     console.log("Submit button was clicked!");
@@ -39,15 +40,15 @@ export class MeetingCreateComponent implements OnInit {
   
   onSubmit() {
     console.log("Form was submitted!");
-   /*  let meeting = {
+     let meeting = {
       meetingDay :this.meetingDay,
-      startTime:this.startTime,
-      endTime:this.endTime,
-      where:this.where,
-      purpose:this.purpose,
-      createdBy:this.createdBy
+      startTime:this.meetingStartTime.hour+''+this.meetingStartTime.minute,
+      endTime:this.meetingEndTime.hour+''+this.meetingEndTime.minute,
+      where:this.meetingLocation,
+      purpose:this.meetingPurpose,
+      createdBy:this.meetingCreatedBy
     }
-
+    console.log(meeting.startTime , '<- start and end time -> ', meeting.endTime);
     this.appService.createMeeting(meeting).subscribe(
 
       (apiResponse) =>{
@@ -65,7 +66,7 @@ export class MeetingCreateComponent implements OnInit {
 
 
 
-    ) */
+    ) 
     this.activeModal.close();
   }
 

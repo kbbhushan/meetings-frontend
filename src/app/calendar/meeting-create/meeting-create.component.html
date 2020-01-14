@@ -1,4 +1,4 @@
-<form (ngSubmit)="onSubmit()">
+<form #createMeetingForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="modal-header">
       <h4 class="modal-title">Hi there!</h4>
       <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
@@ -6,7 +6,30 @@
       </button>
     </div>
     <div class="modal-body">
-      
+      <div class="form-group">
+        <label>Meeting Purpose</label>
+        <input type="text" name="meetingPurpose" [(ngModel)]="meetingPurpose" #purpose="ngModel" 
+        class="form-control" placeholder="Meeting Purpose" required>
+    </div>
+    <div class=" row form-group">
+        <label>Timings</label>
+        <div class="col-6">
+        <label>Start Time</label>
+        <ngb-timepicker name ="meetingStartTime" [(ngModel)]="meetingStartTime"></ngb-timepicker>
+        <label>End Time</label>
+        <ngb-timepicker name ="meetingEndTime" [(ngModel)]="meetingEndTime"></ngb-timepicker>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Location</label>
+        <input type="text" name="meetingLocation" [(ngModel)]="meetingLocation" #location="ngModel" 
+        class="form-control" placeholder="Meeting Location" required>
+    </div>
+    <div class="form-group">
+        <label>Created By</label>
+        <input type="text" name="meetingCreatedBy" [(ngModel)]="meetingCreatedBy" #createdBy="ngModel" 
+        class="form-control" placeholder="Meeting Created By" required>
+    </div>
     </div>
     <div class="modal-footer">
       <button  class="btn btn-outline-success" (click)="onClick()">Submit</button>
