@@ -28,6 +28,8 @@ import {Router} from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AppService} from '../../app.service';
 import { DayComponent } from '../day/day.component';
+import { SocketService } from '../../socket.service';
+import {Cookie} from 'ng2-cookies/ng2-cookies'
 
 const colors: any = {
   red: {
@@ -70,12 +72,14 @@ export class CalendarComponent {
 
   constructor(private modalService: NgbModal,
     private datePipe : DatePipe,public router: Router,private appService : AppService,
+    private SocketService: SocketService,
     private toastr: ToastrService,
     vcr: ViewContainerRef
     ) {}
 
     ngOnInit() {
-      
+      this.checkStatus();
+      this.verifyUserConfirmation();
       this.getMeetingsInThisMonth();
     }
 
@@ -150,4 +154,32 @@ export class CalendarComponent {
       this.refresh.next();
       console.log(this.events);
   }
+
+  public checkStatus: any = () => {
+
+    if (Cookie.get('authtoken') === undefined || Cookie.get('authtoken') === '' || Cookie.get('authtoken') === null) {
+
+      this.router.navigate(['/login']);
+
+      return false;
+
+    } else {
+
+      return true;
+
+    }
+
+  } // end checkStatus
+
+  public verifyUserConfirmation: any = () => {
+
+    this.SocketService.verifyUser()
+      .subscribe((data) => {
+
+       // this.disconnectedSocket = false;
+
+        this.SocketService.setUser(Cookie.get('authtoken'));
+
+      });
+    }
 }
