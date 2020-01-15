@@ -1,17 +1,25 @@
-<div class="container">
-    <div><h1 class="center"> {{ day}} - {{month}} - {{year}}</h1></div>
+<div class="modal-header">
+  <h4 class="modal-title"> {{ day}} - {{month}} - {{year}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
   <div *ngIf="meetingsOnThisDay ; else noMeetings" >
-  <div *ngFor='let meeting of meetingsOnThisDay'>
-   <button (click)="showMeetingDetails(meeting)" > {{meeting.startTime + ''}} -{{meeting.endTime}} </button><br>
-   </div>
-  </div><br><br>
-  <div>
-    <button class="btn btn-primary" (click)="createMeeting()" >Create Meeting</button><br>
-  </div>
-  <br>
-  <ng-template #noMeetings>
-    <p>
-      There are no meetings on this day.
-    </p>
-  </ng-template>
+    <div *ngFor='let meeting of meetingsOnThisDay'>
+     <button (click)="showMeetingDetails(meeting)" > {{meeting.startTime + ''}} -{{meeting.endTime}} </button><br>
+     </div>
+    </div><br><br>
+    <div>
+      <button class="btn btn-primary" (click)="createMeeting()" >Create Meeting</button><br>
+    </div>
+    <br>
+    <ng-template #noMeetings>
+      <p>
+        There are no meetings on this day.
+      </p>
+    </ng-template>       
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
 </div>

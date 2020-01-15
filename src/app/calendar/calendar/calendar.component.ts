@@ -46,7 +46,7 @@ const colors: any = {
 
 @Component({
   selector: 'app-calendar',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./calendar.component.css'],
   templateUrl: './calendar.component.html'
 })
@@ -60,32 +60,11 @@ export class CalendarComponent {
 
   viewDate: Date = new Date();
 
-  modalData: {
-    action: string;
-    event: CalendarEvent;
-  };
-
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fa fa-fw fa-pencil"></i>',
-      a11yLabel: 'Edit',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      }
-    },
-    {
-      label: '<i class="fa fa-fw fa-times"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      }
-    }
-  ];
-
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [];
+  meetingsInThisMonth =[];
+  events: CalendarEvent[]=[];
+  
 
   activeDayIsOpen: boolean = false;
 
@@ -101,68 +80,24 @@ export class CalendarComponent {
     }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    console.log('date clicked is ', date);
+    
     this.dateClicked = date; 
-    // this.modalData = { event, action };
-    //this.modal.open(this.modalContent, { size: 'lg' });
     const modalRef = this.modalService.open(DayComponent);
     modalRef.componentInstance.date = date;
+    modalRef.result.then((result)=>{
+      this.getMeetingsInThisMonth();
+    }, (reason) =>{   console.log('console msg from showMeetingDetails', reason)});
     
-    console.log('view date is ', this.viewDate);
   }
 
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd
-  }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map(iEvent => {
-      if (iEvent === event) {
-        return {
-          ...event,
-          start: newStart,
-          end: newEnd
-        };
-      }
-      return iEvent;
-    });
-    this.handleEvent('Dropped or resized', event);
-  }                                                                                                                                                                                                                                                                                                                                                                                                                                     
-
-  handleEvent(action: string, event: CalendarEvent): void {
-   // this.modalData = { event, action };
-    //this.modal.open(this.modalContent, { size: 'lg' });
-  }
-
-  addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true
-        }
-      }
-    ];
-  }
-
-  deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter(event => event !== eventToDelete);
-  }
-
+ 
   setView(view: CalendarView) {
     this.view = view;
   }
 
   closeOpenMonthViewDay() {
-    this.activeDayIsOpen = false;
     
-   // console.log('view-',this.view,'viewDate',this.viewDate);
+    this.activeDayIsOpen = false;
     this.getMeetingsInThisMonth();
     
   }
@@ -171,21 +106,48 @@ export class CalendarComponent {
    
     let year = this.datePipe.transform(this.viewDate,'yyyy');
     let month = this.datePipe.transform(this.viewDate, 'MM');
-   // console.log(this.viewDate);
-    console.log("year-",year,'month-',month);
+    
     this.appService.getMeetingsInAMonth({month: year+month}).subscribe((apiResponse) =>{
 
       if(apiResponse.status===200){
-        console.log(apiResponse.data);
-       //this.meetingsInThisMonth = apiResponse.data;
-        //this.meetingDays=this.meetingsInThisMonth
+        
+       this.meetingsInThisMonth = apiResponse.data;
+       console.log(this.meetingsInThisMonth);
+       this.loadEvents();
+       
       }else{
 
         console.log('Error Occurred');
       }
-
-
     })
+;
+
+     
   }///end of getMeetingsInThisMonth
 
+  loadEvents():any{
+    this.events=[];
+    this.meetingsInThisMonth.forEach((meeting)=> {
+      let starthours = meeting.startTime.toString().substring(0,2);
+      let startMins = meeting.startTime.toString().substring(2);
+      let endhours = meeting.endTime.toString().substring(0,2);
+      let endMins = meeting.endTime.toString().substring(2);
+      
+      this.events.push({"title" : meeting.purpose,
+                          "start" : new Date(meeting.meetingDay.substring(0,4),//year
+                                              meeting.meetingDay.substring(4,6)-1,//month starts at 0
+                                              meeting.meetingDay.substring(6), //day
+                                              starthours, startMins
+                                            ),
+                          "end":new Date(meeting.meetingDay.substring(0,4),//year
+                          meeting.meetingDay.substring(4,6)-1,//month starts at 0
+                          meeting.meetingDay.substring(6), //day
+                          endhours,endMins
+                        ),
+                          "color" : colors.yellow
+      })
+          });
+      this.refresh.next();
+      console.log(this.events);
+  }
 }

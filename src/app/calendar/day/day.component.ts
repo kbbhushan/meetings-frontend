@@ -65,7 +65,7 @@ export class DayComponent implements OnInit {
   createMeeting(){
 
     console.log('Create Meeting called');
-     const modalRef = this.modalService.open(MeetingCreateComponent, {size : 'lg'});
+    const modalRef = this.modalService.open(MeetingCreateComponent, {size : 'lg'});
     modalRef.componentInstance.date = this.date;
     modalRef.result.then((result)=>{
       this.getMeeetingsOnThisDay();
