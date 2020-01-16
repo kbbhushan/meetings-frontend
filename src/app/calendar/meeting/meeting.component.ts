@@ -3,6 +3,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { AppService } from '../../app.service';
 import { MeetingEditComponent } from '../meeting-edit/meeting-edit.component';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 
 
@@ -18,9 +19,10 @@ export class MeetingComponent implements OnInit {
   year : string;
   month : string;
   day : string;
+  isAdmin : boolean;
 
   ngOnInit() {
-
+    this.isAdmin = /.*-admin$/.test(Cookie.get('userName'));
     this.year = this.datePipe.transform(this.date,'yyyy');
    this.month = this.datePipe.transform(this.date, 'MM');
     this.day = this.datePipe.transform(this.date, 'dd');

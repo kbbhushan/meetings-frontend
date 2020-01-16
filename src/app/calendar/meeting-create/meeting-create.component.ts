@@ -3,6 +3,7 @@ import { AppService } from 'src/app/app.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { NgbTimepicker } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService} from 'ngx-toastr'
 @Component({
   selector: 'app-meeting-create',
   templateUrl: './meeting-create.component.html',
@@ -13,7 +14,8 @@ export class MeetingCreateComponent implements OnInit {
   constructor(private appService : AppService,
               private modalService: NgbModal,
               public activeModal: NgbActiveModal,
-              private datePipe: DatePipe
+              private datePipe: DatePipe,
+              private toastr : ToastrService
             ) { }
 
   ngOnInit() {
@@ -55,7 +57,7 @@ export class MeetingCreateComponent implements OnInit {
 
         if(apiResponse.status===200){
           console.log(apiResponse.data);
-         
+          this.toastr.success('Meeting Created Successfully!');
         }else{
   
           console.log('Error Occurred');

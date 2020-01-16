@@ -29,7 +29,8 @@ import { ToastrService } from 'ngx-toastr';
 import { AppService} from '../../app.service';
 import { DayComponent } from '../day/day.component';
 import { SocketService } from '../../socket.service';
-import {Cookie} from 'ng2-cookies/ng2-cookies'
+import {Cookie} from 'ng2-cookies/ng2-cookies';
+
 
 const colors: any = {
   red: {
@@ -78,6 +79,7 @@ export class CalendarComponent {
     ) {}
 
     ngOnInit() {
+      this.toastr.success('Welcome !!!');
       this.checkStatus();
       this.verifyUserConfirmation();
       this.getMeetingsInThisMonth();

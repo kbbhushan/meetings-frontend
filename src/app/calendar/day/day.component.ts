@@ -5,6 +5,7 @@ import {DatePipe} from '@angular/common';
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap'
 import { MeetingComponent } from '../meeting/meeting.component';
 import { MeetingCreateComponent } from '../meeting-create/meeting-create.component';
+import { Cookie } from 'ng2-cookies/ng2-cookies'
  
 @Component({
   selector: 'app-day',
@@ -19,6 +20,7 @@ export class DayComponent implements OnInit {
   day:string;
   meetingsOnThisDay=[];
   meetingId:string;
+  isAdmin:boolean;
   constructor(private _route : ActivatedRoute, private router:Router,private datePipe: DatePipe,
               private appService : AppService,private modalService: NgbModal,public activeModal: NgbActiveModal) { }
   
@@ -27,7 +29,8 @@ export class DayComponent implements OnInit {
 
     
     this.getMeeetingsOnThisDay();
-
+    this.isAdmin = /.*-admin$/.test(Cookie.get('userName'));
+    
   }
  
   getMeeetingsOnThisDay(){
