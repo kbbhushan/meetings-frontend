@@ -1,0 +1,12 @@
+<div class="container" style="text-align:center">
+    <div class="row" style="text-align:center">
+      <div class="col-md-12" style="font-size:22px"> Users List </div>
+      <br><br><br><br>
+    </div>
+    <div  class="users" *ngIf="userslist.length>0">
+        <li *ngFor="let user of userslist" >
+           
+                 <button class="btn btn-primary" (click)= "goToCalendarView()">{{user.userName}}</button>
+        </li>
+    </div>
+</div>  

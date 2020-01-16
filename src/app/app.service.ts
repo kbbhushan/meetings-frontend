@@ -59,40 +59,68 @@ export class AppService {
     return this.http.post(`${this.url}/api/v1/users/login`, params);
   } // end of signinFunction function.
 
-  public getMeetingsInAMonth(data): Observable<any> {
+  public getUserslist(): Observable<any> {
+    
+    const httpOptions = {
+      headers: new HttpHeaders({
+      
+        'authToken': Cookie.get('authtoken')
+      })
+    };
+    return this.http.get(`${this.url}/api/v1/users/userslist`,httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  } // end of getUserslist function.
 
-    return this.http.get(`${this.url}/api/v1/meetings/month/`+data.month).pipe(
+
+  public getMeetingsInAMonth(data): Observable<any> {
+    
+    const httpOptions = {
+      headers: new HttpHeaders({
+      
+        'authToken': Cookie.get('authtoken')
+      })
+    };
+    return this.http.get(`${this.url}/api/v1/meetings/month/`+data.month,httpOptions).pipe(
       catchError(this.handleError)
     );
   } // end of getMeetingsInAMonth function.
 
   public getMeetingsOnADay(data): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+      
+        'authToken': Cookie.get('authtoken')
+      })
+    };
 
-    return this.http.get(`${this.url}/api/v1/meetings/day/`+data.day).pipe(
+    return this.http.get(`${this.url}/api/v1/meetings/day/`+data.day , httpOptions).pipe(
       catchError(this.handleError)
     );
   } // end of getMeetingsInAMonth function.
 
   public editMeeting(data): Observable<any> {
 
+    data['authToken'] = Cookie.get('authtoken');
+    console.log('data is edit Meeting', data)
     return this.http.put(`${this.url}/api/v1/meetings/edit/`+data.meetingId, data).pipe(
       catchError(this.handleError)
     );
-  } // end of getMeetingsInAMonth function.
+  } 
 
   public deleteMeeting(data): Observable<any> {
-
+    data['authToken'] = Cookie.get('authtoken');
     return this.http.post(`${this.url}/api/v1/meetings/delete/`+data.meetingId, data).pipe(
       catchError(this.handleError)
     );
-  } // end of getMeetingsInAMonth function.
+  } 
 
   public createMeeting(data): Observable<any> {
-
+    data['authToken'] = Cookie.get('authtoken');
     return this.http.post(`${this.url}/api/v1/meetings/create`, data).pipe(
       catchError(this.handleError)
     );
-  } // end of getMeetingsInAMonth function.
+  }
 
   public logout(): Observable<any> {
 

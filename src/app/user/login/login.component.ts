@@ -68,8 +68,11 @@ export class LoginComponent implements OnInit {
              Cookie.set('receiverName', apiResponse.data.userDetails.firstName + ' ' + apiResponse.data.userDetails.lastName);
            
              this.appService.setUserInfoInLocalStorage(apiResponse.data.userDetails)
-            
-             this.router.navigate(['/calendar']);
+            if(/.*-admin/.test(apiResponse.data.userDetails.userName)){
+             this.router.navigate(['/userslist']);
+            }else{
+              this.router.navigate(['/calendar']);
+            }
 
           } else {
 
