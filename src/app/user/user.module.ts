@@ -17,7 +17,7 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     RouterModule.forChild([
-      {path:'signup', component:SignupComponent}
+      {path:'sign-up', component:SignupComponent}
     ])
   ]
 })

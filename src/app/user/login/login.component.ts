@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class LoginComponent implements OnInit {
 
-  public email: any;
+  public userName: any;
   public password: any;
 
   constructor(
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
 
   public signinFunction: any = () => {
 
-    if (!this.email) {
+    if (!this.userName) {
       this.toastr.warning('enter email')
 
 
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
     } else {
 
       let data = {
-        email: this.email,
+        userName: this.userName,
         password: this.password
       }
 
@@ -60,6 +60,8 @@ export class LoginComponent implements OnInit {
             console.log(apiResponse)
 
              Cookie.set('authtoken', apiResponse.data.authToken);
+
+             Cookie.set('userName', apiResponse.data.userDetails.userName);
             
              Cookie.set('receiverId', apiResponse.data.userDetails.userId);
             

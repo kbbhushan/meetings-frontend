@@ -11,12 +11,13 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SignupComponent implements OnInit {
 
+  public userName: any;
   public firstName: any;
   public lastName: any;
   public mobile: any;
   public email: any;
   public password: any;
-  public apiKey: any;
+ 
 
   constructor(  
     public appService: AppService,
@@ -37,7 +38,11 @@ export class SignupComponent implements OnInit {
 
   public signupFunction: any = () => {
 
-    if (!this.firstName) {
+    if (!this.userName) {
+      this.toastr.warning('enter user name')
+     
+
+    }else if (!this.firstName) {
       this.toastr.warning('enter first name')
      
 
@@ -54,18 +59,16 @@ export class SignupComponent implements OnInit {
       this.toastr.warning('enter password')
      
 
-    } else if (!this.apiKey) {
-      this.toastr.warning('Enter your API key')
-
-    } else {
+    }  else {
 
       let data = {
+        userName:this.userName,
         firstName: this.firstName,
         lastName: this.lastName,
         mobile: this.mobile,
         email: this.email,
         password: this.password,
-        apiKey: this.apiKey
+       
       }
 
       console.log(data);

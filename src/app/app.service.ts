@@ -38,6 +38,7 @@ export class AppService {
   public signupFunction(data): Observable<any> {
 
     const params = new HttpParams()
+      .set('userName',data.userName)
       .set('firstName', data.firstName)
       .set('lastName', data.lastName)
       .set('mobile', data.mobile)
@@ -52,7 +53,7 @@ export class AppService {
   public signinFunction(data): Observable<any> {
 
     const params = new HttpParams()
-      .set('email', data.email)
+      .set('userName', data.userName)
       .set('password', data.password);
 
     return this.http.post(`${this.url}/api/v1/users/login`, params);
