@@ -192,7 +192,7 @@ export class CalendarComponent {
         .subscribe((data) => {
   
          // this.disconnectedSocket = false;
-  console.log('received a meeting update');
+        console.log(data);
        alert(data);
   
         });
