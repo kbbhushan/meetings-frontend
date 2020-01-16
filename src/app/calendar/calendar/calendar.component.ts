@@ -82,6 +82,7 @@ export class CalendarComponent {
       this.toastr.success('Welcome !!!');
       this.checkStatus();
       this.verifyUserConfirmation();
+      this.getMeetingUpdates();
       this.getMeetingsInThisMonth();
     }
 
@@ -184,4 +185,16 @@ export class CalendarComponent {
 
       });
     }
+
+    public getMeetingUpdates: any = () => {
+
+      this.SocketService.getMeetingUpdates()
+        .subscribe((data) => {
+  
+         // this.disconnectedSocket = false;
+  console.log('received a meeting update');
+       alert(data);
+  
+        });
+      }
 }

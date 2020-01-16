@@ -57,6 +57,19 @@ export class SocketService {
 
   } // end onlineUserList
 
+  public getMeetingUpdates = () => {
+
+    return Observable.create((observer) => {
+
+      this.socket.on("meetingupdate", (data) => {
+
+        observer.next(data);
+
+      }); // end Socket
+
+    }); // end Observable
+
+  } // end onlineUserList
 
   public disconnectedSocket = () => {
 
