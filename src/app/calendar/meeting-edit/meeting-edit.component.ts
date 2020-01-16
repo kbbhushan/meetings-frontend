@@ -10,7 +10,8 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap'
 })
 export class MeetingEditComponent implements OnInit {
 
-  constructor(private appService : AppService,private modalService: NgbModal,public activeModal: NgbActiveModal) { }
+  constructor(private appService : AppService,private modalService: NgbModal,
+    public activeModal: NgbActiveModal) { }
 
   ngOnInit() {
   }

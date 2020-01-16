@@ -59,12 +59,12 @@ export class MeetingCreateComponent implements OnInit {
           console.log(apiResponse.data);
           this.toastr.success('Meeting Created Successfully!');
         }else{
-  
+          this.toastr.error('Error Occurred!');
           console.log('Error Occurred');
         }
-  
-  
-      }
+      },
+
+      (error) => {  this.toastr.error('Error Occurred!') }
 
 
 

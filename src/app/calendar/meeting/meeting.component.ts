@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { AppService } from '../../app.service';
 import { MeetingEditComponent } from '../meeting-edit/meeting-edit.component';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { ToastrService} from 'ngx-toastr'
 
 
 
@@ -15,7 +16,8 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 export class MeetingComponent implements OnInit {
 
   constructor( private datePipe : DatePipe,
-              private appService : AppService,private modalService: NgbModal,public activeModal: NgbActiveModal) { }
+              private appService : AppService,private modalService: NgbModal,
+              public activeModal: NgbActiveModal, private toastr:ToastrService) { }
   year : string;
   month : string;
   day : string;
@@ -51,35 +53,42 @@ editThisMeeting(){
 
 editMeeting(data){
 
-  this.appService.editMeeting(data).subscribe((apiResponse) =>{
+  this.appService.editMeeting(data).subscribe(
+    
+    (apiResponse) =>{
 
-    if(apiResponse.status===200){
-      console.log(apiResponse.data);
-      console.log('update successful');
-    }else{
+        if(apiResponse.status===200){
+          console.log(apiResponse.data);
+          console.log('update successful');
+          this.toastr.success('Meeting Edited Successfully!')
+        }else{
 
-      console.log('Error Occurred');
-    }
+          console.log('Error Occurred');
+        }
+    },
 
-
-  })
+    (error) => {  this.toastr.error('Error Occurred!') }
+    )
 }
 
 deleteThisMeeting(data){
 
-  this.appService.deleteMeeting(data).subscribe((apiResponse) =>{
+  this.appService.deleteMeeting(data).subscribe(
+    (apiResponse) =>{
 
-    if(apiResponse.status===200){
-      console.log(apiResponse.data);
-      console.log('Delete successful');
-      this.activeModal.close();
-    }else{
+        if(apiResponse.status===200){
+          console.log(apiResponse.data);
+          console.log('Delete successful');
+          this.toastr.success('Delete Successfull!')
+          this.activeModal.close();
+        }else{
 
-      console.log('Error Occurred');
-    }
+          console.log('Error Occurred');
+        }
+    },
 
-
-  })
+    (error) => {  this.toastr.error('Error Occurred!') }
+    )
 }
 
 }

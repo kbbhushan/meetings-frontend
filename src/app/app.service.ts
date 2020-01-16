@@ -61,28 +61,37 @@ export class AppService {
 
   public getMeetingsInAMonth(data): Observable<any> {
 
-
-    return this.http.get(`${this.url}/api/v1/meetings/month/`+data.month);
+    return this.http.get(`${this.url}/api/v1/meetings/month/`+data.month).pipe(
+      catchError(this.handleError)
+    );
   } // end of getMeetingsInAMonth function.
 
   public getMeetingsOnADay(data): Observable<any> {
 
-    return this.http.get(`${this.url}/api/v1/meetings/day/`+data.day);
+    return this.http.get(`${this.url}/api/v1/meetings/day/`+data.day).pipe(
+      catchError(this.handleError)
+    );
   } // end of getMeetingsInAMonth function.
 
   public editMeeting(data): Observable<any> {
 
-    return this.http.put(`${this.url}/api/v1/meetings/edit/`+data.meetingId, data);
+    return this.http.put(`${this.url}/api/v1/meetings/edit/`+data.meetingId, data).pipe(
+      catchError(this.handleError)
+    );
   } // end of getMeetingsInAMonth function.
 
   public deleteMeeting(data): Observable<any> {
 
-    return this.http.post(`${this.url}/api/v1/meetings/delete/`+data.meetingId, data);
+    return this.http.post(`${this.url}/api/v1/meetings/delete/`+data.meetingId, data).pipe(
+      catchError(this.handleError)
+    );
   } // end of getMeetingsInAMonth function.
 
   public createMeeting(data): Observable<any> {
 
-    return this.http.post(`${this.url}/api/v1/meetings/create`, data);
+    return this.http.post(`${this.url}/api/v1/meetings/create`, data).pipe(
+      catchError(this.handleError)
+    );
   } // end of getMeetingsInAMonth function.
 
   public logout(): Observable<any> {
@@ -90,7 +99,9 @@ export class AppService {
     const params = new HttpParams()
       .set('authToken', Cookie.get('authtoken'))
 
-    return this.http.post(`${this.url}/api/v1/users/logout`, params);
+    return this.http.post(`${this.url}/api/v1/users/logout`, params).pipe(
+      catchError(this.handleError)
+    );
 
   } // end logout function
 
@@ -112,7 +123,7 @@ export class AppService {
 
     console.error(errorMessage);
 
-    return Observable.throw(errorMessage);
+    return throwError(errorMessage);
 
   }  // END handleError
 
