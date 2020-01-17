@@ -79,7 +79,6 @@ export class CalendarComponent {
     ) {}
 
     ngOnInit() {
-      this.toastr.success('Welcome !!!');
       this.checkStatus();
       this.verifyUserConfirmation();
       this.getMeetingUpdates();
@@ -134,26 +133,28 @@ export class CalendarComponent {
 
   loadEvents():any{
     this.events=[];
-    this.meetingsInThisMonth.forEach((meeting)=> {
-      let starthours = meeting.startTime.toString().substring(0,2);
-      let startMins = meeting.startTime.toString().substring(2);
-      let endhours = meeting.endTime.toString().substring(0,2);
-      let endMins = meeting.endTime.toString().substring(2);
-      
-      this.events.push({"title" : meeting.purpose,
-                          "start" : new Date(meeting.meetingDay.substring(0,4),//year
-                                              meeting.meetingDay.substring(4,6)-1,//month starts at 0
-                                              meeting.meetingDay.substring(6), //day
-                                              starthours, startMins
-                                            ),
-                          "end":new Date(meeting.meetingDay.substring(0,4),//year
-                          meeting.meetingDay.substring(4,6)-1,//month starts at 0
-                          meeting.meetingDay.substring(6), //day
-                          endhours,endMins
-                        ),
-                          "color" : colors.yellow
-      })
-          });
+    if(this.meetingsInThisMonth!=null && this.meetingsInThisMonth.length>0){
+        this.meetingsInThisMonth.forEach((meeting)=> {
+          let starthours = meeting.startTime.toString().substring(0,2);
+          let startMins = meeting.startTime.toString().substring(2);
+          let endhours = meeting.endTime.toString().substring(0,2);
+          let endMins = meeting.endTime.toString().substring(2);
+          
+          this.events.push({"title" : meeting.purpose,
+                              "start" : new Date(meeting.meetingDay.substring(0,4),//year
+                                                  meeting.meetingDay.substring(4,6)-1,//month starts at 0
+                                                  meeting.meetingDay.substring(6), //day
+                                                  starthours, startMins
+                                                ),
+                              "end":new Date(meeting.meetingDay.substring(0,4),//year
+                              meeting.meetingDay.substring(4,6)-1,//month starts at 0
+                              meeting.meetingDay.substring(6), //day
+                              endhours,endMins
+                            ),
+                              "color" : colors.yellow
+          })
+              });//end of meetingsInThisMonth
+      }//end of if
       this.refresh.next();
       console.log(this.events);
   }

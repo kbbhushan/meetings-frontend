@@ -20,6 +20,7 @@ export class MeetingEditComponent implements OnInit {
   
   onClick() {
     console.log("Submit button was clicked!");
+    this.activeModal.close(this.meeting);
   }
   
   onSubmit() {

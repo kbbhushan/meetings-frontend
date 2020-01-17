@@ -48,7 +48,9 @@ editThisMeeting(){
   modalRef.componentInstance.date = this.date;
   modalRef.result.then((result)=>{
 
-    console.log('Calling Edit Meeting', this.editMeeting(result));
+    if(result){
+      this.editMeeting(result);
+    }
     this.activeModal.close();
   }, (reason) =>{   console.log('console msg from showMeetingDetails', reason)});
 }

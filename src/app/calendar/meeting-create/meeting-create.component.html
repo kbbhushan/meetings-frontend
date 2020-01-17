@@ -11,13 +11,17 @@
         <input type="text" name="meetingPurpose" [(ngModel)]="meetingPurpose" #purpose="ngModel" 
         class="form-control" placeholder="Meeting Purpose" required>
     </div>
-    <div class=" row form-group">
-        <label>Timings</label>
-        <div class="col-6">
-        <label>Start Time</label>
-        <ngb-timepicker name ="meetingStartTime" [(ngModel)]="meetingStartTime"></ngb-timepicker>
-        <label>End Time</label>
-        <ngb-timepicker name ="meetingEndTime" [(ngModel)]="meetingEndTime"></ngb-timepicker>
+    <div class="form-group">
+      
+        <div class="timediv">
+        <label class="timelabel">Start Time</label>
+        <input type="text" name="meetingStartTime" [(ngModel)]="meetingStartTime" #startTime="ngModel" 
+        class="form-control" placeholder="0900" required>
+        </div>
+        <div class="timediv">
+          <label class="timelabel">End Time</label>
+          <input type="text" name="meetingEndTime" [(ngModel)]="meetingEndTime" #endTime="ngModel" 
+          class="form-control" placeholder="1030" required>
         </div>
     </div>
     <div class="form-group">
@@ -28,7 +32,7 @@
     <div class="form-group">
         <label>Created By</label>
         <input type="text" name="meetingCreatedBy" [(ngModel)]="meetingCreatedBy" #createdBy="ngModel" 
-        class="form-control" placeholder="Meeting Created By" required>
+        class="form-control" placeholder="Meeting Created By" disabled>
     </div>
     </div>
     <div class="modal-footer">
