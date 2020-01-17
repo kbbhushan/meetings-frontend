@@ -24,7 +24,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
       {path:'sign-up', component:SignupComponent},
       {path:'userslist', component:UserslistComponent},
       {path:'forgotPassword', component:ForgotPasswordComponent},
-      {path:'reset/:authToken', component:ResetPasswordComponent}
+      {path:'reset/:userId/:authToken', component:ResetPasswordComponent}
     ])
   ]
 })

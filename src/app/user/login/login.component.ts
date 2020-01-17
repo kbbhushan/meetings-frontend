@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
           }
 
         }, (err) => {
-          this.toastr.error('some error occured')
+          this.toastr.error(err)
 
         });
 

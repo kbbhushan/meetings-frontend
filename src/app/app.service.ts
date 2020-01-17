@@ -144,6 +144,15 @@ export class AppService {
 
   } // end logout function
 
+  public updatePassword(data): Observable<any> {
+    
+    return this.http.post(`${this.url}/api/v1/users/updatePassword`, data).pipe(
+      catchError(this.handleError)
+    );
+
+  } // end logout function
+
+
   
 
   private handleError(err: HttpErrorResponse) {
