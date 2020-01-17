@@ -87,9 +87,12 @@ export class AppService {
   } // end of getMeetingsInAMonth function.
 
   public getMeetingsOnADay(data): Observable<any> {
+
+    /* authToken can also be added to data as in other functions. 
+    It is here just added to see about httpOptions. This throwed CORS error.
+    So, also modified routeLogger.js in backend middlewares to allow authToken in http headers.*/
     const httpOptions = {
       headers: new HttpHeaders({
-      
         'authToken': Cookie.get('authtoken')
       })
     };
