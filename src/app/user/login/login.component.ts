@@ -90,6 +90,11 @@ export class LoginComponent implements OnInit {
 
   } // end signinFunction
 
+  public forgotPassword: any = () =>{
+
+      this.router.navigate(['/forgotPassword'])
+  }
+
   
 
   

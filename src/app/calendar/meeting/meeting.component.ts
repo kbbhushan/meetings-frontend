@@ -22,6 +22,7 @@ export class MeetingComponent implements OnInit {
   month : string;
   day : string;
   isAdmin : boolean;
+  
 
   ngOnInit() {
     this.isAdmin = /.*-admin$/.test(Cookie.get('userName'));
@@ -29,6 +30,7 @@ export class MeetingComponent implements OnInit {
    this.month = this.datePipe.transform(this.date, 'MM');
     this.day = this.datePipe.transform(this.date, 'dd');
 
+    
   }
 
 

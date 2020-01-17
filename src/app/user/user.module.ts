@@ -7,11 +7,12 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { UserslistComponent } from './userslist/userslist.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, UserslistComponent],
+  declarations: [LoginComponent, SignupComponent, UserslistComponent, ForgotPasswordComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -19,7 +20,8 @@ import { UserslistComponent } from './userslist/userslist.component';
     ToastrModule.forRoot(),
     RouterModule.forChild([
       {path:'sign-up', component:SignupComponent},
-      {path:'userslist', component:UserslistComponent}
+      {path:'userslist', component:UserslistComponent},
+      {path:'forgotPassword', component:ForgotPasswordComponent}
     ])
   ]
 })

@@ -4,6 +4,13 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
+<mwl-calendar-day-view
+
+[viewDate]="date"
+>
+</mwl-calendar-day-view>
+
+
 <div class="modal-body">
   <div *ngIf="meetingsOnThisDay ; else noMeetings" >
     <div *ngFor='let meeting of meetingsOnThisDay'>
