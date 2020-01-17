@@ -11,7 +11,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppService } from './app.service';
 import { CalendarModule } from 'angular-calendar';
 import { DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns'
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgHttpLoaderModule } from 'ng-http-loader'
 
 
 @NgModule({
@@ -26,7 +27,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns'
     UserModule,
     MyCalendarModule,
     AppRoutingModule,
-   
+    NgHttpLoaderModule.forRoot()
     
   ],
   providers: [AppService],
