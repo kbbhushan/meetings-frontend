@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class ForgotPasswordComponent implements OnInit {
 
-  public email : any;
+  public userName : any;
 
   constructor(  public appService: AppService,
     public router : Router) { }

@@ -39,4 +39,20 @@ export class UserslistComponent implements OnInit {
     this.router.navigate(['/calendar']);
   }
 
+  public logout : any =() => {
+
+    this.appService.logout().subscribe(
+      (apiResponse) => {
+        if(apiResponse.status===200){
+          this.router.navigate(['/login'])            
+         }else{
+   
+          this.toastr.error('Error Occurred');
+         }
+      },
+      (error) => {this.toastr.error('Some error occurred')}
+
+    )//end of subscribe
+} //  end of logout
+
 }
