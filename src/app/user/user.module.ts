@@ -8,11 +8,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { UserslistComponent } from './userslist/userslist.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, UserslistComponent, ForgotPasswordComponent],
+  declarations: [LoginComponent, SignupComponent, UserslistComponent, 
+    ForgotPasswordComponent,ResetPasswordComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -21,7 +23,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     RouterModule.forChild([
       {path:'sign-up', component:SignupComponent},
       {path:'userslist', component:UserslistComponent},
-      {path:'forgotPassword', component:ForgotPasswordComponent}
+      {path:'forgotPassword', component:ForgotPasswordComponent},
+      {path:'reset/:authToken', component:ResetPasswordComponent}
     ])
   ]
 })

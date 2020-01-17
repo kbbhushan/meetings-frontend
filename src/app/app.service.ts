@@ -133,6 +133,17 @@ export class AppService {
 
   } // end logout function
 
+  public resetPassword(data): Observable<any> {
+
+    const params = new HttpParams()
+      .set('userName', data.userName)
+
+    return this.http.post(`${this.url}/api/v1/users/password-reset`, params).pipe(
+      catchError(this.handleError)
+    );
+
+  } // end logout function
+
   
 
   private handleError(err: HttpErrorResponse) {
