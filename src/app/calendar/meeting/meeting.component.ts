@@ -49,16 +49,30 @@ editThisMeeting(){
   modalRef.componentInstance.meeting = this.meeting;
   modalRef.componentInstance.date = this.date;
   modalRef.result.then((result)=>{
+    if(result){ 
+      if(!result.purpose){this.toastr.warning('Meeting Agenda cannot be null')}
+            else if(!result.startTime){this.toastr.warning('start time cannot be null')}
+            else if(!result.endTime){this.toastr.warning('end time cannot be null')}
+            else if(!result.location){this.toastr.warning('Enter meeting location')}
+            else if(!(/[0-1][0-9][0-5][0-9]|[2][0-3][0-5][0-9]/.test(result.startTime))){
+              this.toastr.warning('Start time is not valid')
+            }else if(!(/[0-1][0-9][0-5][0-9]|[2][0-3][0-5][0-9]/.test(result.endTime))){
+              this.toastr.warning('End time is not valid')
+            }else if(result.startTime > result.endTime)
+                {this.toastr.warning('End time should be after start time')}
+            else{
+                this.editMeeting(result);
+                console.log(result)
+                this.activeModal.close();
+              }
 
-    if(result){
-      this.editMeeting(result);
-    }
-    this.activeModal.close();
-  }, (reason) =>{   console.log('console msg from showMeetingDetails', reason)});
+  }}, 
+  (reason) =>{   console.log('console msg from showMeetingDetails', reason)})
 }
 
+    
 editMeeting(data){
-
+  console.log("I came here")
   this.appService.editMeeting(data).subscribe(
     
     (apiResponse) =>{

@@ -56,6 +56,7 @@ const colors: any = {
 
 export class CalendarComponent {
   @ViewChild('modalAlert', { static: true }) modalAlert: TemplateRef<any>;
+  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
   dateClicked: Date;
 
@@ -109,6 +110,28 @@ export class CalendarComponent {
 
   }
 
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd
+  }: CalendarEventTimesChangedEvent): void {
+    this.events = this.events.map(iEvent => {
+      if (iEvent === event) {
+        return {
+          ...event,
+          start: newStart,
+          end: newEnd
+        };
+      }
+      return iEvent;
+    });
+    this.handleEvent('Dropped or resized', event);
+  }
+
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.modalData = { event, action };
+    this.modalService.open(this.modalContent, { size: 'lg' });
+  }
 
   setView(view: CalendarView) {
     this.view = view;
