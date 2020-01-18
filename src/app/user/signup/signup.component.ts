@@ -40,8 +40,7 @@ export class SignupComponent implements OnInit {
 
     if (!this.userName) {
       this.toastr.warning('enter user name')
-     
-
+    
     }else if (!this.firstName) {
       this.toastr.warning('enter first name')
      

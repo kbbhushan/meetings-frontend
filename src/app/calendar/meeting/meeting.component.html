@@ -1,19 +1,18 @@
 <div class="modal-header">
-      <h4 class="modal-title"> {{ day}} - {{month}} - {{year}}</h4>
+      <h4 class="modal-title">{{meeting.purpose}}</h4>
       <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
 </div>
 <div class="modal-body">
-        <div class="row" *ngIf="meeting">
-              <div class="col-md-12">
-                <h2>{{meeting.purpose}}</h2>
-                <p>Date: {{meeting.meetingDay}}</p>
-                <p>Starts at : {{meeting.startTime}}  Ends at: {{meeting.endTime}}</p>
-                <p>created by {{meeting.createdBy}} on {{meeting.createdOn | date}}</p>
-            </div>
-            </div>
-            <hr>         
+      <div *ngIf="meeting">
+           <p>Date: {{day}}-{{month}}-{{year}}</p>
+            <p>Starts at : {{meeting.startTime}}</p>
+            <p>Ends at: {{meeting.endTime}}</p>
+            <p>Location: {{meeting.location}}</p>
+            <p>Created by {{meeting.createdBy}} on {{meeting.createdOn | date}}</p>
+
+      </div>      
 </div>
 <div class="modal-footer">
       <button  class="btn btn-primary" (click)="editThisMeeting()" *ngIf="isAdmin">Edit</button>

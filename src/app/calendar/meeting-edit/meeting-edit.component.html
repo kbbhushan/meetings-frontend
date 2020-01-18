@@ -1,6 +1,6 @@
 <form (ngSubmit)="onSubmit()">
     <div class="modal-header">
-      <h4 class="modal-title">Hi there!</h4>
+      <h4 class="modal-title">Edit Details</h4>
       <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -8,26 +8,27 @@
     <div class="modal-body">
        
         <div class="form-group">
-            <label>Meeting Purpose</label>
+            <label>Meeting Agenda</label>
             <input type="text" name="meetingPurpose" [(ngModel)]="meeting.purpose" #purpose="ngModel" 
             class="form-control" placeholder="Meeting Purpose" required>
         </div>
         <div class="form-group">
-          <fieldset class="form-group col-xs-6">
-            <label>Start Time</label>
+          <div class="timediv">
+            <label class="timelabel">Start Time</label>
             <input type="text" name="startTime" [(ngModel)]="meeting.startTime" #startTime="ngModel" 
             class="form-control" placeholder="Start Time" required>
-          </fieldset>
-           
-          <fieldset class="form-group col-xs-6">
-            <label>End Time</label>
+            
+          </div>
+          <span>--</span>
+          <div class="timediv">
+            <label  class="timelabel">End Time</label>
             <input type="text" name="endTime" [(ngModel)]="meeting.endTime" #endTime="ngModel" 
             class="form-control" placeholder="End Time" required>
-          </fieldset>
+          </div>
         </div>
           <div class="form-group">
             <label>Location</label>
-            <input type="text" name="meetingLocation" [(ngModel)]="meeting.where" #location="ngModel" 
+            <input type="text" name="meetingLocation" [(ngModel)]="meeting.location" #location="ngModel" 
             class="form-control" placeholder="Meeting Location" required>
         </div>
         <div class="form-group">

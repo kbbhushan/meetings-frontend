@@ -1,27 +1,27 @@
 <form #createMeetingForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="modal-header">
-      <h4 class="modal-title">Hi there!</h4>
+      <h4 class="modal-title">Please Add meeting details</h4>
       <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label>Meeting Purpose</label>
+        <label>Meeting Agenda</label>
         <input type="text" name="meetingPurpose" [(ngModel)]="meetingPurpose" #purpose="ngModel" 
-        class="form-control" placeholder="Meeting Purpose" required>
+        class="form-control" placeholder="Meeting Agenda" required>
     </div>
     <div class="form-group">
       
         <div class="timediv">
         <label class="timelabel">Start Time</label>
         <input type="text" name="meetingStartTime" [(ngModel)]="meetingStartTime" #startTime="ngModel" 
-        class="form-control" placeholder="0900" required>
-        </div>
+        class="form-control" placeholder="24-hour format Ex-0900" required>
+        </div><span>-</span>
         <div class="timediv">
           <label class="timelabel">End Time</label>
           <input type="text" name="meetingEndTime" [(ngModel)]="meetingEndTime" #endTime="ngModel" 
-          class="form-control" placeholder="1030" required>
+          class="form-control" placeholder="24-hour format Ex-0930" required>
         </div>
     </div>
     <div class="form-group">

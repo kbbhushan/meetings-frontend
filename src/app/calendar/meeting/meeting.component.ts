@@ -4,7 +4,8 @@ import { DatePipe } from '@angular/common';
 import { AppService } from '../../app.service';
 import { MeetingEditComponent } from '../meeting-edit/meeting-edit.component';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
-import { ToastrService} from 'ngx-toastr'
+import { ToastrService} from 'ngx-toastr';
+import { SocketService} from '../../socket.service'
 
 
 
@@ -17,7 +18,8 @@ export class MeetingComponent implements OnInit {
 
   constructor( private datePipe : DatePipe,
               private appService : AppService,private modalService: NgbModal,
-              public activeModal: NgbActiveModal, private toastr:ToastrService) { }
+              public activeModal: NgbActiveModal, private toastr:ToastrService,
+              private socketService : SocketService) { }
   year : string;
   month : string;
   day : string;
@@ -64,7 +66,8 @@ editMeeting(data){
         if(apiResponse.status===200){
           console.log(apiResponse.data);
           console.log('update successful');
-          this.toastr.success('Meeting Edited Successfully!')
+          this.toastr.success('Meeting Edited Successfully!');
+          this.socketService.sendMeetingUpdates('A meeting is Updated.');
         }else{
 
           console.log('Error Occurred');
@@ -83,7 +86,8 @@ deleteThisMeeting(data){
         if(apiResponse.status===200){
           console.log(apiResponse.data);
           console.log('Delete successful');
-          this.toastr.success('Delete Successfull!')
+          this.toastr.success('Delete Successfull!');
+          this.socketService.sendMeetingUpdates('A meeting is deleted.');
           this.activeModal.close();
         }else{
 

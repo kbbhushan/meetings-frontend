@@ -70,6 +70,7 @@ export class CalendarComponent {
   
 
   activeDayIsOpen: boolean = false;
+  isAdmin : boolean ;
 
   constructor(private modalService: NgbModal,
     private datePipe : DatePipe,public router: Router,private appService : AppService,
@@ -79,6 +80,7 @@ export class CalendarComponent {
     ) {}
 
     ngOnInit() {
+      this.isAdmin = /.*-admin$/.test(Cookie.get('userName'));
       this.checkStatus();
       this.verifyUserConfirmation();
       this.getMeetingUpdates();
@@ -191,12 +193,15 @@ export class CalendarComponent {
 
       this.SocketService.getMeetingUpdates()
         .subscribe((data) => {
-  
-         // this.disconnectedSocket = false;
-        console.log(data);
-       alert(data);
+
+       this.toastr.info(data);
   
         });
+      }
+      
+    public  goToUsersList = () => {
+
+        this.router.navigate(['/userslist']);
       }
 
   public logout : any =() => {
@@ -204,6 +209,9 @@ export class CalendarComponent {
       this.appService.logout().subscribe(
         (apiResponse) => {
           if(apiResponse.status===200){
+            localStorage.clear();
+            Cookie.deleteAll();
+            this.SocketService.exitSocket();
             this.router.navigate(['/login'])            
            }else{
      
