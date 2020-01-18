@@ -13,10 +13,10 @@
 
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class ="nav-link " style="float:right" (click)="logout()">Logout</a> 
+        <a class ="nav-link" style="cursor:pointer;float:right" (click)="logout()"><span class="pointer">Logout</span></a> 
       </li>
       <li class="nav-item">
-        <a class ="nav-link" style="float:right" (click)="goToUsersList()" *ngIf="isAdmin">UsersList</a> 
+        <a class ="nav-link" style="cursor:pointer;float:right" (click)="goToUsersList()" *ngIf="isAdmin">UsersList</a> 
       </li>
 
     </ul>
@@ -138,4 +138,22 @@
   <div *ngFor="let event of day.events">
       <small style="margin: 2px">{{event.start | date : 'shortTime'}} {{event.title}}</small>
   </div></div>
+</ng-template>
+
+
+<ng-template #modalAlert let-meeting="meeting" let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Meeting Remider</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Your meeting - {{meetingTitle}} - is about to start at {{meetingStartTime}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-success" (click)="close();remind=true">Snooze</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="close();remind=false">Dismiss</button>
+    
+  </div>
 </ng-template>

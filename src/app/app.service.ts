@@ -41,7 +41,7 @@ export class AppService {
       .set('userName',data.userName)
       .set('firstName', data.firstName)
       .set('lastName', data.lastName)
-      .set('mobile', data.mobile)
+      .set('mobile', data.mobileNumber)
       .set('email', data.email)
       .set('password', data.password);
       

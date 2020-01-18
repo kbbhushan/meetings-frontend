@@ -22,14 +22,14 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView
 } from 'angular-calendar';
-import {  OnInit , ViewContainerRef } from '@angular/core';
-import {DatePipe} from '@angular/common';
-import {Router} from '@angular/router';
+import { OnInit, ViewContainerRef } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { AppService} from '../../app.service';
+import { AppService } from '../../app.service';
 import { DayComponent } from '../day/day.component';
 import { SocketService } from '../../socket.service';
-import {Cookie} from 'ng2-cookies/ng2-cookies';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 
 const colors: any = {
@@ -53,10 +53,11 @@ const colors: any = {
   styleUrls: ['./calendar.component.css'],
   templateUrl: './calendar.component.html'
 })
-export class CalendarComponent {
-  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
-  dateClicked : Date ;
+export class CalendarComponent {
+  @ViewChild('modalAlert', { static: true }) modalAlert: TemplateRef<any>;
+
+  dateClicked: Date;
 
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
@@ -65,100 +66,112 @@ export class CalendarComponent {
 
   refresh: Subject<any> = new Subject();
 
-  meetingsInThisMonth =[];
-  events: CalendarEvent[]=[];
-  
+  meetingsInThisMonth = [];
+  events: CalendarEvent[] = [];
+
 
   activeDayIsOpen: boolean = false;
-  isAdmin : boolean ;
+  isAdmin: boolean;
+  remind: boolean = true;
+  modalData: {
+    action: string;
+    event: CalendarEvent;
+  };
+
+  meetingTitle: string;
+  meetingStartTime: any;
 
   constructor(private modalService: NgbModal,
-    private datePipe : DatePipe,public router: Router,private appService : AppService,
+    private datePipe: DatePipe, public router: Router, private appService: AppService,
     private SocketService: SocketService,
     private toastr: ToastrService,
     vcr: ViewContainerRef
-    ) {}
+  ) { }
 
-    ngOnInit() {
-      this.isAdmin = /.*-admin$/.test(Cookie.get('userName'));
-      this.checkStatus();
-      this.verifyUserConfirmation();
-      this.getMeetingUpdates();
-      this.getMeetingsInThisMonth();
-    }
+  ngOnInit() {
+    this.isAdmin = /.*-admin$/.test(Cookie.get('userName'));
+    this.checkStatus();
+    this.verifyUserConfirmation();
+    this.getMeetingUpdates();
+    this.getMeetingsInThisMonth();
 
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    
-    this.dateClicked = date; 
-    const modalRef = this.modalService.open(DayComponent);
-    modalRef.componentInstance.date = date;
-    modalRef.result.then((result)=>{
-      this.getMeetingsInThisMonth();
-    }, (reason) =>{   console.log('console msg from showMeetingDetails', reason)});
-    
+    setInterval(() => { this.meetingReminder() }, 15000)
   }
 
- 
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+
+    this.dateClicked = date;
+    const modalRef = this.modalService.open(DayComponent);
+    modalRef.componentInstance.date = date;
+    modalRef.result.then((result) => {
+      this.getMeetingsInThisMonth();
+    }, (reason) => { console.log('console msg from showMeetingDetails', reason) });
+
+  }
+
+
   setView(view: CalendarView) {
     this.view = view;
   }
 
   closeOpenMonthViewDay() {
-    
+
     this.activeDayIsOpen = false;
     this.getMeetingsInThisMonth();
-    
+
   }
 
-  getMeetingsInThisMonth(){
-   
-    let year = this.datePipe.transform(this.viewDate,'yyyy');
-    let month = this.datePipe.transform(this.viewDate, 'MM');
-    
-    this.appService.getMeetingsInAMonth({month: year+month}).subscribe((apiResponse) =>{
+  getMeetingsInThisMonth: any = () => {
 
-      if(apiResponse.status===200){
-        
-       this.meetingsInThisMonth = apiResponse.data;
-       console.log(this.meetingsInThisMonth);
-       this.loadEvents();
-       
-      }else{
+    let year = this.datePipe.transform(this.viewDate, 'yyyy');
+    let month = this.datePipe.transform(this.viewDate, 'MM');
+
+    this.appService.getMeetingsInAMonth({ month: year + month }).subscribe((apiResponse) => {
+
+      if (apiResponse.status === 200) {
+
+        this.meetingsInThisMonth = apiResponse.data;
+        console.log(this.meetingsInThisMonth);
+        this.loadEvents();
+
+      } else {
 
         console.log('Error Occurred');
       }
     })
-;
+      ;
 
-     
+
   }///end of getMeetingsInThisMonth
 
-  loadEvents():any{
-    this.events=[];
-    if(this.meetingsInThisMonth!=null && this.meetingsInThisMonth.length>0){
-        this.meetingsInThisMonth.forEach((meeting)=> {
-          let starthours = meeting.startTime.toString().substring(0,2);
-          let startMins = meeting.startTime.toString().substring(2);
-          let endhours = meeting.endTime.toString().substring(0,2);
-          let endMins = meeting.endTime.toString().substring(2);
-          
-          this.events.push({"title" : meeting.purpose,
-                              "start" : new Date(meeting.meetingDay.substring(0,4),//year
-                                                  meeting.meetingDay.substring(4,6)-1,//month starts at 0
-                                                  meeting.meetingDay.substring(6), //day
-                                                  starthours, startMins
-                                                ),
-                              "end":new Date(meeting.meetingDay.substring(0,4),//year
-                              meeting.meetingDay.substring(4,6)-1,//month starts at 0
-                              meeting.meetingDay.substring(6), //day
-                              endhours,endMins
-                            ),
-                              "color" : colors.yellow
-          })
-              });//end of meetingsInThisMonth
-      }//end of if
-      this.refresh.next();
-      console.log(this.events);
+  loadEvents: any = () => {
+    this.events = [];
+    if (this.meetingsInThisMonth != null && this.meetingsInThisMonth.length > 0) {
+      this.meetingsInThisMonth.forEach((meeting) => {
+        let starthours = meeting.startTime.toString().substring(0, 2);
+        let startMins = meeting.startTime.toString().substring(2);
+        let endhours = meeting.endTime.toString().substring(0, 2);
+        let endMins = meeting.endTime.toString().substring(2);
+
+        this.events.push({
+          "title": meeting.purpose,
+          "start": new Date(meeting.meetingDay.substring(0, 4),//year
+            meeting.meetingDay.substring(4, 6) - 1,//month starts at 0
+            meeting.meetingDay.substring(6), //day
+            starthours, startMins
+          ),
+          "end": new Date(meeting.meetingDay.substring(0, 4),//year
+            meeting.meetingDay.substring(4, 6) - 1,//month starts at 0
+            meeting.meetingDay.substring(6), //day
+            endhours, endMins
+          ),
+          "color": colors.yellow,
+
+        })
+      });//end of meetingsInThisMonth
+    }//end of if
+    this.refresh.next();
+    console.log(this.events);
   }
 
   public checkStatus: any = () => {
@@ -182,44 +195,63 @@ export class CalendarComponent {
     this.SocketService.verifyUser()
       .subscribe((data) => {
 
-       // this.disconnectedSocket = false;
+        // this.disconnectedSocket = false;
 
         this.SocketService.setUser(Cookie.get('authtoken'));
 
       });
-    }
+  }
 
-    public getMeetingUpdates: any = () => {
+  public getMeetingUpdates: any = () => {
 
-      this.SocketService.getMeetingUpdates()
-        .subscribe((data) => {
+    this.SocketService.getMeetingUpdates()
+      .subscribe((data) => {
 
-       this.toastr.info(data);
-  
-        });
-      }
-      
-    public  goToUsersList = () => {
+        this.toastr.info(data);
+        this.refresh.next();
+      });
+  }
 
-        this.router.navigate(['/userslist']);
-      }
+  public goToUsersList: any = () => {
 
-  public logout : any =() => {
+    this.router.navigate(['/userslist']);
+  }
 
-      this.appService.logout().subscribe(
-        (apiResponse) => {
-          if(apiResponse.status===200){
-            localStorage.clear();
-            Cookie.deleteAll();
-            this.SocketService.exitSocket();
-            this.router.navigate(['/login'])            
-           }else{
-     
-            this.toastr.error('Error Occurred');
-           }
-        },
-        (error) => {this.toastr.error('Some error occurred')}
+  public meetingReminder: any = () => {
 
-      )//end of subscribe
+    
+    for (let meeting of this.events) {
+
+      if (meeting.start.getTime() > new Date().getTime() &&
+        meeting.start.getTime() - new Date().getTime() < 90000 && meeting.remind) {
+
+        this.meetingTitle = meeting.title;
+        this.meetingStartTime = this.datePipe.transform(meeting.start, 'shortTime');
+        
+        this.modalService.open(this.modalAlert, { size: 'sm' });
+        
+      }//end if
+    }//end for
+
+  }
+
+
+  public logout: any = () => {
+
+    this.appService.logout().subscribe(
+      (apiResponse) => {
+        if (apiResponse.status === 200) {
+          localStorage.clear();
+          Cookie.deleteAll();
+          this.SocketService.exitSocket();
+          this.router.navigate(['/login'])
+        } else {
+
+          this.toastr.error('Error Occurred');
+        }
+      },
+      (error) => { this.toastr.error('Some error occurred') }
+
+    )//end of subscribe
   } //  end of logout
 }
