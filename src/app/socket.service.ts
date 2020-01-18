@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import * as io from 'socket.io-client';
-
-import { Observable , throwError} from 'rxjs';
-import { catchError, retry} from 'rxjs/operators';
-import { Cookie } from 'ng2-cookies/ng2-cookies';
-
+import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpErrorResponse, HttpParams } from "@angular/common/http";
 
@@ -43,6 +38,20 @@ export class SocketService {
 
   } // end verifyUser
 
+  public authError = () => {
+
+    return Observable.create((observer) => {
+
+      this.socket.on('auth-error', (data) => {
+
+        observer.next(data);
+
+      }); // end Socket
+
+    }); // end Observable
+
+  } // end authError
+
   public onlineUserList = () => {
 
     return Observable.create((observer) => {
@@ -57,12 +66,9 @@ export class SocketService {
 
   } // end onlineUserList
 
-  public sendMeetingUpdates = (data) => {
-
-      this.socket.emit("meetingupdate", (data) ) // end Socket
-
-  } // end getMeedtingUpdates
-
+  /**
+   * This function will receive the updates about meetings.
+   */
   public getMeetingUpdates = () => {
 
     return Observable.create((observer) => {
@@ -75,7 +81,7 @@ export class SocketService {
 
     }); // end Observable
 
-  } // end getMeedtingUpdates
+  } // end getMeetingUpdates
 
 
   public disconnectedSocket = () => {
@@ -94,21 +100,25 @@ export class SocketService {
 
   } // end disconnectSocket
 
-   // events to be emitted
+  // events to be emitted
+
+  /**
+   * When a meeting is created, updated or deleted, this event is emitted.
+   */
+  public sendMeetingUpdates = (data) => {
+
+    this.socket.emit("meetingupdate", (data)) // end Socket
+
+  } // end sendMeedtingUpdates
+
 
   public setUser = (authToken) => {
-
     this.socket.emit("set-user", authToken);
-
   } // end setUser
 
- 
-  public exitSocket = () =>{
 
-
+  public exitSocket = () => {
     this.socket.disconnect();
-
-
   }// end exit socket
 
 

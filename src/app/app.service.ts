@@ -145,7 +145,7 @@ export class AppService {
       catchError(this.handleError)
     );
 
-  } // end logout function
+  } // end reset Password function
 
   public updatePassword(data): Observable<any> {
     
@@ -153,7 +153,7 @@ export class AppService {
       catchError(this.handleError)
     );
 
-  } // end logout function
+  } // end update password function
 
 
   

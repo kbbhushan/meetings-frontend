@@ -95,7 +95,7 @@ export class CalendarComponent {
     this.getMeetingUpdates();
     this.getMeetingsInThisMonth();
 
-    setInterval(() => { this.meetingReminder() }, 15000)
+    setInterval(() => { this.meetingReminder() }, 5000)
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -131,7 +131,7 @@ export class CalendarComponent {
       if (apiResponse.status === 200) {
 
         this.meetingsInThisMonth = apiResponse.data;
-        console.log(this.meetingsInThisMonth);
+       // console.log(this.meetingsInThisMonth);
         this.loadEvents();
 
       } else {
@@ -171,7 +171,7 @@ export class CalendarComponent {
       });//end of meetingsInThisMonth
     }//end of if
     this.refresh.next();
-    console.log(this.events);
+    //console.log(this.events);
   }
 
   public checkStatus: any = () => {
@@ -223,7 +223,7 @@ export class CalendarComponent {
     for (let meeting of this.events) {
 
       if (meeting.start.getTime() > new Date().getTime() &&
-        meeting.start.getTime() - new Date().getTime() < 90000 && meeting.remind) {
+        meeting.start.getTime() - new Date().getTime() < 70000 && this.remind) {
 
         this.meetingTitle = meeting.title;
         this.meetingStartTime = this.datePipe.transform(meeting.start, 'shortTime');
