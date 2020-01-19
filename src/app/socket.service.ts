@@ -10,7 +10,7 @@ import { HttpErrorResponse, HttpParams } from "@angular/common/http";
 })
 export class SocketService {
 
-  private url = 'http://172.31.32.61:3000';
+  private url = 'http://localhost:3000';
 
   private socket;
 

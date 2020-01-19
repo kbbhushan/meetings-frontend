@@ -10,7 +10,7 @@ import {HttpErrorResponse, HttpParams} from '@angular/common/http';
 @Injectable()
 export class AppService {
 
-  private url =  'http://172.31.32.61:3000';
+  private url =  'http://localhost:3000';
 
   constructor(
     public http: HttpClient
