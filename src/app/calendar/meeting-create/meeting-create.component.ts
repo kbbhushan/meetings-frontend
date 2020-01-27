@@ -23,20 +23,27 @@ export class MeetingCreateComponent implements OnInit {
             ) { }
 
   ngOnInit() {
-    if(this.date.getDate() < new Date().getDate()){
-      this.toastr.error('Cannot create back dated meetings.');
-      this.activeModal.dismiss();
-    }
     
+        
     this.meetingDay = this.datePipe.transform(this.date,'yyyy')+''+
     this.datePipe.transform(this.date, 'MM')+''+
     this.datePipe.transform(this.date, 'dd');
+
+    this.todayDate = this.datePipe.transform(new Date(),'yyyy')+''+
+    this.datePipe.transform(new Date(), 'MM')+''+
+    this.datePipe.transform(new Date(), 'dd');
+    
+    if(this.meetingDay < this.todayDate){
+      this.toastr.error('Cannot create back dated meetings.');
+      this.activeModal.dismiss();
+    }
+
     this.userInfo=this.appService.getUserInfoFromLocalstorage();
     this.meetingCreatedBy = this.userInfo.firstName+' '+this.userInfo.lastName;
    
   }
   @Input() date;
-
+  
   public meetingDay : any;
   public userInfo :any;
   public meetingStartTime: string;
@@ -44,7 +51,7 @@ export class MeetingCreateComponent implements OnInit {
   public meetingLocation:any;
   public meetingPurpose: string;
   public meetingCreatedBy :any;
-  public todayDate:Date;
+  public todayDate:string;
 
   onClick() {
     console.log("Submit button was clicked!");
